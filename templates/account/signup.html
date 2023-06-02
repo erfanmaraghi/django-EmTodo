@@ -7,12 +7,15 @@
         {% csrf_token %}
         Username:
         {{ form.username }}
+        {% for error in form.username.errors %}{{ error }}{% endfor %}
         <br>
         Password:
         {{ form.password1 }}
+        {% for error in form.password1.errors %}{{ error }}{% endfor %}
         <br>
         Password Confirmation:
         {{ form.password2 }}
+        {% for error in form.password2.errors %}{{ error }}{% endfor %}
         <br>
         <input type="submit">
     </form>
