@@ -44,13 +44,9 @@ def time_since(timestamp):
 class Task(models.Model):
     title = models.CharField(max_length=250)
     description = models.TextField(null=True, blank=True)
-    scheduled_for = models.DateTimeField(null=True, blank=True)
     is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name="tasks", on_delete=models.CASCADE)
-
-    def target_time(self):
-        return time_since(self.scheduled_for)
 
     def added_time(self):
         return time_since(self.created_at)
