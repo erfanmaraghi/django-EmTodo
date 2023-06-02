@@ -20,3 +20,9 @@ def complete(request, pk):
     task.is_completed = not task.is_completed
     task.save()
     return render(request, "core/index.html", {'closed': True})
+
+
+def delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.delete()
+    return render(request, "core/index.html", {'closed': True})

@@ -5,5 +5,6 @@ app_name = "core"
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('complete/<int:pk>/', views.complete, name="complete")
+    path('complete/<int:pk>/', views.complete, name="complete"),
+    path('delete/<int:pk>/', views.delete, name="delete")
 ]
