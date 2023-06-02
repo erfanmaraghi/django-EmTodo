@@ -4,6 +4,11 @@
 
 {% block content %}
     <h1>Wellcome to EmTodo...</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit">
+    </form>
     {% for task in request.user.tasks.all %}
         <h2>{{ task.title }}</h2>
         <p>{{ task.description }}</p>
