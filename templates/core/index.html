@@ -12,7 +12,6 @@
     {% for task in request.user.tasks.all %}
         <h2>{{ task.title }}</h2>
         <p>{{ task.description }}</p>
-        <p>{{ task.target_time }}</p>
         <p>{{ task.added_time }}</p>
     {% endfor %}
 {% endblock %}
