@@ -13,5 +13,34 @@
         <h2>{{ task.title }}</h2>
         <p>{{ task.description }}</p>
         <p>{{ task.added_time }}</p>
+
+        <a target="_blank"
+           href="{% url 'core:complete' task.id %}"
+           onclick="openLink(event)">
+            {% if task.is_completed %}
+                <label>
+                    <input type="checkbox" checked> UnComplete
+                </label>
+            {% else %}
+                <label>
+                    <input type="checkbox"> Complete
+                </label>
+            {% endif %}
+
+        </a>
+
     {% endfor %}
+
+    {% if closed %}
+        <script>window.close()</script>
+    {% endif %}
+
+    <script>
+        function openLink(event) {
+            event.preventDefault();
+            let link = event.currentTarget.href;
+            window.open(link, '_blank');
+            location.reload()
+        }
+    </script>
 {% endblock %}
