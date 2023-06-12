@@ -3,46 +3,67 @@
 {% block title %}Wellcome{% endblock %}
 
 {% block content %}
-    <h1>Wellcome to EmTodo...</h1>
     {% if request.user.is_authenticated %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit">
-        </form>
+
+        <div class="tasks-list-container" id="tasks-list-container">
+
+            {% for task in request.user.tasks.all %}
+
+                <div class="task-container">
+
+                    <div>
+                        <header>
+                            <h2 style="display: inline-block">{{ task.title }}</h2>
+                            <p style="display: inline-block">{{ task.added_time }}</p>
+                        </header>
+                        <p>{{ task.description }}</p>
+                    </div>
+
+                    <div class="task-container-right">
+                        <a href="{% url 'core:delete' task.id %}" target="_blank" onclick="openLink(event)">
+                            Delete
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-trash3-fill"
+                                 viewBox="0 0 16 16">
+                                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"></path>
+                            </svg>
+                        </a>
+
+                        <a target="_blank"
+                           href="{% url 'core:complete' task.id %}"
+                           onclick="openLink(event)">
+                            {% if task.is_completed %}
+                                <label>
+                                    UnComplete <input type="checkbox" checked>
+                                </label>
+                            {% else %}
+                                <label>
+                                    Complete <input type="checkbox">
+                                </label>
+                            {% endif %}
+                        </a>
+
+                    </div>
+                </div>
+            {% endfor %}
+            {# New Task Form #}
+            <form method="post" id="new-task-form">
+                {% csrf_token %}
+                {{ form.title.label }}
+                {{ form.title }}
+                <br>
+                {{ form.description.label }}
+                {{ form.description }}
+                <br>
+                <input type="submit">
+            </form>
+
+        </div>
+    {% else %}
+        <div class="alert">
+            <h2>You are not logged in <a href="{% url 'account:login' %}">Click Here</a> To Login</h2>
+        </div>
     {% endif %}
-    {% for task in request.user.tasks.all %}
-        <header>
-            <h2 style="display: inline-block">{{ task.title }}</h2>
-
-            <a href="{% url 'core:delete' task.id %}" target="_blank" onclick="openLink(event)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                     class="bi bi-trash3-fill"
-                     viewBox="0 0 16 16">
-                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"></path>
-                </svg>
-            </a>
-        </header>
-
-        <p>{{ task.description }}</p>
-        <p>{{ task.added_time }}</p>
-
-        <a target="_blank"
-           href="{% url 'core:complete' task.id %}"
-           onclick="openLink(event)">
-            {% if task.is_completed %}
-                <label>
-                    <input type="checkbox" checked> UnComplete
-                </label>
-            {% else %}
-                <label>
-                    <input type="checkbox"> Complete
-                </label>
-            {% endif %}
-
-        </a>
-
-    {% endfor %}
 
     {% if closed %}
         <script>window.close()</script>
